@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+
+build:
+  version: "4.1"
+
+cards:
+  message: "This is for cards details in PROD."
+  contactDetails:
+    name: "Mayank Pal PROD"
+    email: "mayank.pal.prod@microsoft.com"
+  onCallSupport:
+    - 8842244733
+    - 4892254732

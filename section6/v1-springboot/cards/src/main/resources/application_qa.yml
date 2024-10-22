@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+build:
+  version: "3.1"
+
+cards:
+  message: "This is for cards details in QA"
+  contactDetails:
+    name: "Mayank Pal QA"
+    email: "mayank.pal.qa.@microsoft.com"
+  onCallSupport:
+    - 8842244733
+    - 4892254732
