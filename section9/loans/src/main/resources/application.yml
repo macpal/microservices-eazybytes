@@ -19,7 +19,7 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import: "optional:configserver:http://localhost:8071/"
+    import: optional:configserver:http://localhost:8071/
 
 management:
   endpoints:
@@ -34,6 +34,9 @@ management:
   endpoint:
     shutdown:
       enabled: true
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
