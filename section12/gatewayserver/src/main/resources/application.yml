@@ -60,4 +60,3 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2 #Based on how these 2 requests are processed it can decide to go back to close or open state.
       failureRateThreshold: 50 #threshold specifies the percentage of failed calls that will trigger the circuit breaker to open, thereby preventing further calls to a potentially faulty service for a period of time.
       waitDurationInOpenState: 10000
-
