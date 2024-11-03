@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: "gatewayserver"
+  config:
+    import: optional:configserver:http://localhost:8071/
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 10s
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s
+  security: #To enable gateway server as a resource server
+    oauth2:
+      resourceserver:
+        jwt: #Purpose of this path is : During startup of resource server, it will connect and download public certificate from keycloak server. Which can validate authenticity of access tokens
+          jwk-set-uri: "http://localhost:7080/realms/master/protocol/openid-connect/certs"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+  info:
+    env:
+      enabled: true
+  metrics: #Tells micrometer and so prometheus to group all metrics related to account ms under application name "accounts".
+    tags:
+      application: ${spring.application.name}
+
+info:
+  app:
+    name: "gatewayserver"
+    description: "Eazy Bank Gateway Application"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      eazybytes:
+        gatewayserver: DEBUG
+  pattern: # This is for opentelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10 #How many requests initially it has to monitor before it try to change status from close to open.
+      permittedNumberOfCallsInHalfOpenState: 2 #Based on how these 2 requests are processed it can decide to go back to close or open state.
+      failureRateThreshold: 50 #threshold specifies the percentage of failed calls that will trigger the circuit breaker to open, thereby preventing further calls to a potentially faulty service for a period of time.
+      waitDurationInOpenState: 10000

@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: "configserver"
+  profiles:
+#    active: native
+    active: git
+  cloud:
+    config:
+      server:
+#        native:
+#          search-locations: "classpath:/config"
+           git:
+             uri: "https://github.com/eazybytes/eazybytes-config.git"
+             default-label: main
+             timeout: 5
+             clone-on-start: true
+             force-pull: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics: #Tells micrometer and so prometheus to group all metrics related to account ms under application name "accounts".
+    tags:
+      application: ${spring.application.name}
+
+server:
+  port: 8071
+encrypt:
+  key: "uV5oD1WQ2FzSpRXzW35upSL5Yb6H8zrj0wQ/DeS7JFs="
+
+logging:
+  pattern: # This is for opentelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
