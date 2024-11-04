@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: "eurekaserver"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics: #Tells micrometer and so prometheus to group all metrics related to account ms under application name "accounts".
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  pattern: # This is for opentelemetry
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
